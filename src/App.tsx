@@ -1,5 +1,6 @@
 import React from 'react';
-import { Game } from './Game'
+import { Game } from './Game';
+import GameStart from './GameStart';
 import './App.css';
 
 function App() {
@@ -8,7 +9,7 @@ function App() {
       <header className="App-header">
         <h1>Infection Deck</h1>
       </header>
-      <Game cards={['Chicago', 'Washington', 'London', 'Chicago']} />
+      <Game cards={new GameStart().getInitialCards()} />
     </div>
   );
 }

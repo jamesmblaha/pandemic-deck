@@ -97,7 +97,9 @@ export class Game extends React.Component<GameProps, GameState> {
                     <div className="right-container">
                         <div className="pile discard">
                             {
-                                this.state.deck[0].map(card => <div>{card}</div>)
+                                this.state.deck[0]
+                                    .filter((c, i) => { return this.state.deck[0].indexOf(c) === i; })
+                                    .map(card => <div>{card + (this.numInstancesInArr(this.state.deck[0], card) > 1 ? " x" + this.numInstancesInArr(this.state.deck[0], card) : "")}</div>)
                             }
                         </div>
                         {
