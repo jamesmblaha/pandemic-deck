@@ -1,38 +1,151 @@
-.App {
-  text-align: center;
+body {
+    background-color: dimgray;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+html, body, form, fieldset, table, tr, td, img {
+    margin: 0;
+    padding: 0;
+    font: 100%/150% calibri,helvetica,sans-serif;
+    box-sizing: border-box;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+input, button, select, textarea, optgroup, option {
+    font-family: inherit;
+    font-size: inherit;
+    font-style: inherit;
+    font-weight: inherit;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+header {
+    height: 35px;
+    padding: 25px 10px;
+    background-color: darkgray;
+    color: darkslategray;
 }
 
-.App-link {
-  color: #61dafb;
+h1 {
+    font-weight: 600;
+    margin: 0;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.game {
+    width: 100%;
+}
+
+.right-container,
+.left-container {
+    display: inline-block;
+}
+
+.right-container,
+.left-container {
+    height: 80%;
+}
+
+.left-container {
+    width: 75%;
+    float: left;
+}
+
+.right-container {
+    width: 25%;
+}
+
+.bottom-container {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 20px;
+    background-color: darkgray;
+}
+
+.card-row {
+    background-color: darkslategray;
+    padding: 6px 9px;
+    margin: 2px;
+    height: 65px;
+}
+
+.card-row div {
+    display: inline-block;
+}
+
+.card-name {
+    font-size: larger;
+    font-weight: bold;
+}
+
+.card-name,
+.card-actions {
+    width: 30%;
+}
+
+button {
+   cursor:pointer;
+   padding: 4px 12px;
+   border: 0;
+   font-size: larger;
+   font-weight: 450;
+}
+
+.card-actions button {
+    margin-top: 15px;
+    height: 90%;
+}
+
+button.positive {
+    background-color: greenyellow;
+    color: darkslategray;
+}
+
+button.positive:hover {
+    background-color: honeydew;
+}
+
+button.negative {
+    background-color: orangered;
+    color: gainsboro;
+}
+
+button.negative:hover {
+    background-color: #ffbfbf;
+}
+
+button.negative {
+    margin-left: 0;
+}
+
+button.neutral:hover {
+    background-color: lightcyan;
+}
+
+.card-row,
+.percent-container,
+.draw-probability {
+    border-radius: 10px;
+}
+
+.percent-container {
+    width: 40%;
+    background-color: rgb(221,221,221, .6);
+}
+
+.draw-probability {
+    text-align: right;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    color: white;
+    background-color: #4CAF50;
+}
+
+.pile {
+    background-color: gray;
+    border-radius: 10px;
+    margin: 6px;
+    padding: 6px;
+    font-size: larger;
+}
+
+.discard {
+    background-color: gainsboro;
 }
