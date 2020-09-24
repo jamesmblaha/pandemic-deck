@@ -7,7 +7,8 @@ interface GameProps {
 
 interface GameState {
     deck: string[][],
-    prev?: GameState
+    prev?: GameState,
+    numDraws?: number
 }
 
 export class Game extends React.Component<GameProps, GameState> {
@@ -21,7 +22,9 @@ export class Game extends React.Component<GameProps, GameState> {
 
     drawCard = (card: string) => {
         const prevState = this.copyState(this.state);
-        if (!this.removeFromArr(this.state.deck[1], card)) return;
+        if (this.state.deck.length <= 1 
+            || !this.removeFromArr(this.state.deck[1], card)) 
+            return;
         if (this.state.deck[1].length === 0) { this.state.deck.splice(1, 1); }
         this.state.deck[0].push(card);
         this.setState({
@@ -32,7 +35,8 @@ export class Game extends React.Component<GameProps, GameState> {
 
     drawEpidemicCard = (card: string) => {
         const prevState = this.copyState(this.state);
-        if (!this.removeFromArr(this.state.deck[this.state.deck.length - 1], card)) 
+        if (this.state.deck.length <= 1 
+            || !this.removeFromArr(this.state.deck[this.state.deck.length - 1], card)) 
             return;
         if (this.state.deck[this.state.deck.length - 1].length === 0)
             this.state.deck.splice(this.state.deck.length - 1, 1);
@@ -99,7 +103,16 @@ export class Game extends React.Component<GameProps, GameState> {
                             {
                                 this.state.deck[0]
                                     .filter((c, i) => { return this.state.deck[0].indexOf(c) === i; })
-                                    .map(card => <div>{card + (this.numInstancesInArr(this.state.deck[0], card) > 1 ? " x" + this.numInstancesInArr(this.state.deck[0], card) : "")}</div>)
+                                    .map(card => 
+                                        <div>
+                                            <span>{card}</span>
+                                            <div className="dots">
+                                                {
+                                                    Array.from(Array(this.numInstancesInArr(this.state.deck[0], card)).keys())
+                                                        .map(() => <span className="dot"></span>)
+                                                }
+                                            </div>
+                                        </div>)
                             }
                         </div>
                         {
@@ -110,7 +123,13 @@ export class Game extends React.Component<GameProps, GameState> {
                                             .filter((c, i) => { return pile.indexOf(c) === i; })
                                             .map(card => 
                                                 <div>
-                                                    {card + (this.numInstancesInArr(pile, card) > 1 ? " x" + this.numInstancesInArr(pile, card) : "")}
+                                                    <span>{card}</span>
+                                                    <div className="dots">
+                                                        {
+                                                            Array.from(Array(this.numInstancesInArr(pile, card)).keys())
+                                                                .map(() => <span className="dot"></span>)
+                                                        }
+                                                    </div>
                                                 </div>
                                             )
                                         }
@@ -122,13 +141,57 @@ export class Game extends React.Component<GameProps, GameState> {
                 </div>
                 <div className="bottom-container">
                     <button className="neutral" onClick={this.undo} disabled={this.state.prev === undefined ? true : false}>Undo</button>
+                    <div className="slider-container">
+                        <input 
+                            type="range" 
+                            min={1} 
+                            max={4} 
+                            value={this.state.numDraws === undefined ? 1 : this.state.numDraws}
+                            list="steplist"
+                            className="slider" onChange={e => {
+                                this.setState({
+                                    deck: this.state.deck,
+                                    prev: this.state.prev,
+                                    numDraws: parseInt(e.target.value)
+                                })
+                            }} />
+                        <datalist id="steplist">
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                        </datalist>
+                    </div>
+                    <span>{this.state.numDraws === undefined ? 1 : this.state.numDraws}</span>
                 </div>
             </div>
         );
     }
 
     getDrawProbability = (card: string) : number => {
-        return this.numInstancesInArr(this.state.deck[1], card) / this.state.deck[1].length;
+        if (this.state.deck.length <= 1) { return 0; }
+        let draws = this.state.numDraws === undefined ? 1 : this.state.numDraws;
+        let pileIndex = 1;
+        while (draws >= 0 && pileIndex < this.state.deck.length) {
+            if (this.state.deck[pileIndex].length <= draws && this.numInstancesInArr(this.state.deck[pileIndex], card) > 0) { return 1; }
+            else if (this.state.deck[pileIndex].length > draws) {
+                return this.r_getDrawProbability(this.state.deck[pileIndex], card, draws);
+            }
+            draws -= this.state.deck[pileIndex].length;
+            pileIndex++;
+        }
+        return 0;
+    }
+
+    //this should only get called when draws is less than pile length
+    r_getDrawProbability = (pile: string[], card: string, draws: number) : number => {
+        if (draws <= 0) return 0;
+        draws = draws > pile.length ? pile.length : draws;
+        return pile.reduce((total, c) => {
+            if (c === card)
+                return total + 1/pile.length;
+            else
+                return total + this.r_getDrawProbability(pile, card, draws - 1) / pile.length;
+        }, 0);
     }
 
     removeFromArr = <T extends unknown>(arr: T[], val: T) : boolean => {
