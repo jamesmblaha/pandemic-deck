@@ -161,7 +161,7 @@ button.neutral:not([disabled]):hover  {
     width: 10px;
     margin: 0 2px;
     background-color: darkslategray;
-    opacity: 50%;
+    opacity: .5;
     border-radius: 50%;
     display: inline-block;
 }

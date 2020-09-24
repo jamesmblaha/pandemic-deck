@@ -70,7 +70,12 @@ export class Game extends React.Component<GameProps, GameState> {
                         {
                             this.props.cards
                                 .filter((c, i) => { return this.props.cards.indexOf(c) === i; })
-                                .sort((a, b) => this.getDrawProbability(b) - this.getDrawProbability(a))
+                                .sort((a, b) => { 
+                                    const prob = this.getDrawProbability(b) - this.getDrawProbability(a); 
+                                    if (prob > 0) return 1;
+                                    else if (prob < 0) return -1;
+                                    return b < a ? 1 : -1;
+                                })
                                 .map(card => {
                                 const width = this.getDrawProbability(card).toLocaleString(undefined, {style: 'percent'});
                                 const barStyle: CSS.Properties = {
@@ -153,7 +158,7 @@ export class Game extends React.Component<GameProps, GameState> {
                                     deck: this.state.deck,
                                     prev: this.state.prev,
                                     numDraws: parseInt(e.target.value)
-                                })
+                                });
                             }} />
                         <datalist id="steplist">
                             <option>2</option>
@@ -186,12 +191,13 @@ export class Game extends React.Component<GameProps, GameState> {
     r_getDrawProbability = (pile: string[], card: string, draws: number) : number => {
         if (draws <= 0) return 0;
         draws = draws > pile.length ? pile.length : draws;
-        return pile.reduce((total, c) => {
+        return pile.reduce((total, c, i) => {
             if (c === card)
-                return total + 1/pile.length;
-            else
-                return total + this.r_getDrawProbability(pile, card, draws - 1) / pile.length;
-        }, 0);
+                return total + 1;
+            let remainingDeck = Object.assign([], pile);
+            remainingDeck.splice(i, 1);
+            return total + this.r_getDrawProbability(remainingDeck, card, draws - 1);
+        }, 0) / pile.length;
     }
 
     removeFromArr = <T extends unknown>(arr: T[], val: T) : boolean => {
