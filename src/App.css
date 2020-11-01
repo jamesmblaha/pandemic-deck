@@ -45,16 +45,14 @@ h1 {
 
 .left-container {
     width: 75%;
-    float: left;
 }
 
 .right-container {
     width: 25%;
+    vertical-align: top;
 }
 
 .bottom-container {
-    position: fixed;
-    bottom: 0;
     width: 100%;
     padding: 20px;
     background-color: darkgray;

@@ -108,6 +108,7 @@ export class Game extends React.Component<GameProps, GameState> {
                             {
                                 this.state.deck[0]
                                     .filter((c, i) => { return this.state.deck[0].indexOf(c) === i; })
+                                    .sort((a, b) => b < a ? 1 : -1)
                                     .map(card => 
                                         <div>
                                             <span>{card}</span>
@@ -126,6 +127,7 @@ export class Game extends React.Component<GameProps, GameState> {
                                     <div className="pile">
                                         { pile
                                             .filter((c, i) => { return pile.indexOf(c) === i; })
+                                            .sort((a, b) => b < a ? 1 : -1)
                                             .map(card => 
                                                 <div>
                                                     <span>{card}</span>

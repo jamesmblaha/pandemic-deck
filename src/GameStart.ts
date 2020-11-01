@@ -11,6 +11,9 @@ export default class GameStart {
         this.putValuesInArr(initial_cards, 'New York', 3);
         this.putValuesInArr(initial_cards, 'Washington', 3);
         this.putValuesInArr(initial_cards, 'Chicago', 2);
+        this.putValuesInArr(initial_cards, 'Denver', 2);
+        this.putValuesInArr(initial_cards, 'Atlanta', 1);
+        this.putValuesInArr(initial_cards, 'Buenos Aires', 2);
         return initial_cards;
     }
     putValuesInArr = <T extends unknown>(arr: T[], val: T, n: number) => {
